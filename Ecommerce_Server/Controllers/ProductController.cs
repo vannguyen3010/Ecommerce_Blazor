@@ -1,0 +1,34 @@
+﻿using Ecommerce_Library.Contracts;
+using Ecommerce_Library.Models;
+using Ecommerce_Library.Responses;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Ecommerce_Server.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductController : ControllerBase
+    {
+        private readonly IProduct _productService;
+        public ProductController(IProduct productService)
+        {
+            _productService = productService;
+        }
+
+        [HttpGet("GetAll-Product")]
+        public async Task<ActionResult<List<Product>>> GetAllProducts(bool featured)
+        {
+            var products = await _productService.GetAllProducts(featured);
+            return Ok(products);
+        }
+
+        [HttpPost("Add-Product")]
+        public async Task<ActionResult<ServiceResponse>> AddProduct(Product model)
+        {
+            if(model is null) return BadRequest("Model is null");
+            var response = await _productService.AddProduct(model);
+            return Ok(response);
+        }
+    }
+}
