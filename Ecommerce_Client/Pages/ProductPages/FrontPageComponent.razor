@@ -73,13 +73,10 @@
     private async Task RetrieveFeaturedProducts()
     {
         FeaturedProductList?.Clear();
-        bool featured = false;
-        var results = await ClientService.GetAllProducts(featured);
-        if (results is null) return;
-        foreach (var item in results)
-        {
-            FeaturedProductList!.Add(item);
-        }
+        bool featured = true;
+        await ClientService.GetAllProducts(featured);
+        FeaturedProductList = ClientService.FeaturedProducts;
+
     }
     string GetNewLabel(DateTime dateUploaded)
     {
