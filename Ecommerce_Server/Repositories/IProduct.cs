@@ -1,7 +1,7 @@
 ﻿using Ecommerce_Library.Models;
 using Ecommerce_Library.Responses;
 
-namespace Ecommerce_Library.Contracts
+namespace Ecommerce_Server.Repositories
 {
     public interface IProduct
     {

@@ -1,7 +1,6 @@
-﻿using Ecommerce_Library.Contracts;
-using Ecommerce_Library.Models;
+﻿using Ecommerce_Library.Models;
 using Ecommerce_Library.Responses;
-using Microsoft.AspNetCore.Http;
+using Ecommerce_Server.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce_Server.Controllers
@@ -20,7 +19,7 @@ namespace Ecommerce_Server.Controllers
         [HttpPost("Add-Product")]
         public async Task<ActionResult<ServiceResponse>> AddProduct(Product model)
         {
-            if(model is null) return BadRequest("Model is null");
+            if (model is null) return BadRequest("Model is null");
             var response = await productService.AddProduct(model);
             return Ok(response);
         }

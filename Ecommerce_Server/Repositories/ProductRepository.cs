@@ -1,26 +1,21 @@
-﻿using Ecommerce_Library.Contracts;
-using Ecommerce_Library.Models;
+﻿using Ecommerce_Library.Models;
 using Ecommerce_Library.Responses;
 using Ecommerce_Server.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_Server.Repositories
 {
-    public class ProductRepository : IProduct
+    public class ProductRepository(AppDbContext appDbContext) : IProduct
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly AppDbContext appDbContext = appDbContext;
 
-        public ProductRepository(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext;
-        }
         public async Task<ServiceResponse> AddProduct(Product model)
         {
             if (model is null) return new ServiceResponse(false, "Model is null");
             var (flag, message) = await CheckName(model.Name!);
             if(flag)
             {
-                _appDbContext.Products.Add(model);
+                appDbContext.Products.Add(model);
                 await Commit();
                 return new ServiceResponse(true, "Product Saved");
             }
@@ -30,16 +25,16 @@ namespace Ecommerce_Server.Repositories
         public async Task<List<Product>> GetAllProducts(bool featuredProducts)
         {
             if(featuredProducts)
-                return await _appDbContext.Products.Where(x => x.Featured).ToListAsync();
+                return await appDbContext.Products.Where(x => x.Featured).ToListAsync();
             else
-                return await _appDbContext.Products.ToListAsync();
+                return await appDbContext.Products.ToListAsync();
         }
 
         private async Task<ServiceResponse> CheckName(string name)
         {
-            var product = await _appDbContext.Products.FirstOrDefaultAsync(x => x.Name!.ToLower()!.Equals(name.ToLower()));
+            var product = await appDbContext.Products.FirstOrDefaultAsync(x => x.Name!.ToLower()!.Equals(name.ToLower()));
             return product is null ? new ServiceResponse(true, null!) : new ServiceResponse(false, "Product already exits");
         }
-        private async Task Commit() => await _appDbContext.SaveChangesAsync();
+        private async Task Commit() => await appDbContext.SaveChangesAsync();
     }
 }

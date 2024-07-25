@@ -139,3 +139,11 @@ code {
     background-color: #3C78EF;
     color: #fff;
 }
+@font-face {
+    font-family: "MyFont";
+    src: url('../Fonts/vermin.ttf')
+}
+#topBar{
+    font-family: MyFont;
+    text-align: center;
+}
